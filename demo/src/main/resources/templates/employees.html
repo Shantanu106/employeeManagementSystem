@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Employees - Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            transition: all 0.3s;
+        }
+
+        /* Sidebar */
+        #sidebar {
+            width: 200px;
+            background: #f0f0f0;
+            padding: 20px;
+            height: 100vh;
+            transition: width 0.3s;
+            overflow: hidden;
+        }
+
+        #sidebar.collapsed {
+            width: 50px;
+        }
+
+        #sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        #sidebar ul li {
+            margin: 15px 0;
+        }
+
+        #sidebar ul li a {
+            text-decoration: none;
+            color: #333;
+            display: block;
+        }
+
+        #sidebar ul li a:hover {
+            color: #007bff;
+        }
+
+        /* Main content */
+        main {
+            flex: 1;
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background: #f4f4f4;
+        }
+
+        /* Menu toggle button */
+        #menuToggle {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 1000;
+            cursor: pointer;
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+        }
+
+        button {
+            margin: 5px;
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<nav id="sidebar">
+    <h3>Admin Menu</h3>
+    <ul>
+        <li><a href="/admin/dashboard">Dashboard</a></li>
+        <li><a href="/admin/employees">Employees</a></li>
+        <li><a href="/admin/departments">Departments</a></li>
+        <li><a href="/admin/attendance">Attendance</a></li>
+        <li><a href="/admin/payroll">Payroll</a></li>
+        <li><a href="/admin/reports">Reports</a></li>
+        <li><a href="/admin/profile">Profile</a></li>
+        <li><a href="/admin/logout">Logout</a></li>
+    </ul>
+</nav>
+
+<button id="menuToggle">☰</button>
+
+<!-- Main Content -->
+<main>
+    <h1>Employees</h1>
+
+    <!-- Quick actions -->
+    <div>
+        <button onclick="window.location.href='/admin/addEmployee'">Add Employee</button>
+        <button onclick="window.location.href='/admin/approveLeaves'">Approve Leaves</button>
+    </div>
+
+    <!-- Employee Table -->
+    <table id="employeeTable">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Department</th>
+            <th>Email</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Employee data will be inserted here dynamically -->
+        </tbody>
+    </table>
+</main>
+
+<script>
+    // Toggle sidebar
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    menuToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('collapsed');
+    });
+
+    // Fetch employees from backend
+    fetch('/admin/employees/list')
+        .then(response => response.json())
+        .then(employees => {
+            const tbody = document.querySelector('#employeeTable tbody');
+            tbody.innerHTML = '';
+            employees.forEach(emp => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${emp.id}</td>
+                    <td>${emp.name}</td>
+                    <td>${emp.department}</td>
+                    <td>${emp.email}</td>
+                    <td>
+                        <button onclick="editEmployee(${emp.id})">Edit</button>
+                        <button onclick="deleteEmployee(${emp.id})">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        })
+        .catch(err => console.error('Error fetching employees:', err));
+
+    // Example functions for buttons
+    function editEmployee(id) {
+        window.location.href = `/admin/employees/edit/${id}`;
+    }
+
+    function deleteEmployee(id) {
+        if(confirm('Are you sure you want to delete this employee?')) {
+            fetch(`/admin/employees/delete/${id}`, { method: 'DELETE' })
+                .then(() => window.location.reload())
+                .catch(err => console.error('Error deleting employee:', err));
+        }
+    }
+</script>
+
+</body>
+</html>

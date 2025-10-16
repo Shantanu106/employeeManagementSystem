@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Employee</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        .error { color: red; font-size: 0.9em; }
+        .success { color: green; font-size: 1em; margin-bottom: 10px; }
+        form { max-width: 400px; margin: auto; }
+        input { display: block; margin-bottom: 10px; width: 100%; padding: 8px; }
+        button { padding: 8px 12px; }
+    </style>
+</head>
+<body>
+<h2>Add Employee</h2>
+
+<!-- Success Message -->
+<div th:if="${successMessage}" class="success" th:text="${successMessage}"></div>
+
+<!-- Employee Form -->
+<form th:action="@{/admin/addEmployee}" th:object="${employee}" method="post">
+
+    <label>ID</label>
+    <input type="text" th:field="*{id}" placeholder="E001"/>
+    <div class="error" th:if="${#fields.hasErrors('id')}" th:errors="*{id}"></div>
+
+    <label>Name</label>
+    <input type="text" th:field="*{name}" placeholder="John Doe"/>
+    <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+
+    <label>Email</label>
+    <input type="email" th:field="*{email}" placeholder="john@example.com"/>
+    <div class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+
+    <label>Department</label>
+    <input type="text" th:field="*{department}" placeholder="IT"/>
+    <div class="error" th:if="${#fields.hasErrors('department')}" th:errors="*{department}"></div>
+
+    <label>Phone</label>
+    <input type="text" th:field="*{phone}" placeholder="9876543210"/>
+    <div class="error" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
+
+    <label>Salary</label>
+    <input type="number" th:field="*{salary}" placeholder="50000"/>
+    <div class="error" th:if="${#fields.hasErrors('salary')}" th:errors="*{salary}"></div>
+
+    <button type="submit">Add Employee</button>
+</form>
+</body>
+</html>

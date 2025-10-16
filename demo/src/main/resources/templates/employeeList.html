@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>Employee List</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 10px; border: 1px solid #ccc; text-align: left; }
+    a.button { text-decoration: none; padding: 5px 10px; background: #28a745; color: white; border-radius: 5px; }
+    a.delete { background: #dc3545; }
+  </style>
+</head>
+<body>
+<h1>Employee List</h1>
+<div>
+  <form th:action="@{/admin/search}" method="get">
+    <input type="text" name="keyword" placeholder="Search by Name, ID, or Department"
+           th:value="${keyword}" style="padding:5px; width:250px;">
+    <button type="submit" style="padding:5px 10px;">Search</button>
+  </form>
+</div>
+<a class="button" th:href="@{/admin/addEmployee}">Add New Employee</a>
+<br><br>
+<table>
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Department</th>
+    <th>Phone</th>
+    <th>Salary</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="emp : ${employees}">
+    <td th:text="${emp.id}"></td>
+    <td th:text="${emp.name}"></td>
+    <td th:text="${emp.email}"></td>
+    <td th:text="${emp.department}"></td>
+    <td th:text="${emp.phone}"></td>
+    <td th:text="${emp.salary}"></td>
+    <td>
+      <a class="button" th:href="@{/admin/editEmployee/{id}(id=${emp.id})}">Edit</a>
+      <a class="delete" th:href="@{/admin/deleteEmployee/{id}(id=${emp.id})}">Delete</a>
+    </td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>
