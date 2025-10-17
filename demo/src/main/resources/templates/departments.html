@@ -112,7 +112,7 @@
 
     <!-- Quick actions -->
     <div>
-        <button onclick="window.location.href='/admin/departments/add'">Add Department</button>
+        <button onclick="window.location.href='/admin/departments-management/add'">Add Department</button>
     </div>
 
     <!-- Department Table -->
@@ -132,8 +132,31 @@
 </main>
 
 <script>
-    // Toggle sidebar
-    const menuToggle = document.getElementById('menuToggle');
-    const sidebar = document.getElementById('sidebar');
-    menuToggle.addEventListener('click', () => {
-        sidebar.classList.toggle('collapsed')
+    async function loadDepartments() {
+        try {
+            const response = await fetch('http://localhost:8080/api/departments-management');
+            const departments = await response.json();
+
+            const tableBody = document.querySelector('#departmentTable tbody');
+            tableBody.innerHTML = '';
+
+            departments.forEach(dept => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${dept.id}</td>
+                    <td>${dept.departmentName}</td>
+                    <td>${dept.manager}</td>
+                    <td>
+                        <button onclick="editDepartment(${dept.id})">Edit</button>
+                        <button onclick="deleteDepartment(${dept.id})">Delete</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        } catch (err) {
+            console.error('Error loading departments:', err);
+        }
+    }
+
+    window.onload = loadDepartments;
+</script>

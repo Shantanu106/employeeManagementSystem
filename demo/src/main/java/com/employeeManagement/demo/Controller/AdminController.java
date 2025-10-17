@@ -1,6 +1,9 @@
 package com.employeeManagement.demo.Controller;
 
+import com.employeeManagement.demo.Model.Attendance;
+import com.employeeManagement.demo.Model.admin;
 import com.employeeManagement.demo.Model.employee;
+import com.employeeManagement.demo.Service.AttendanceService;
 import com.employeeManagement.demo.Service.EmployeeService;
 import com.employeeManagement.demo.Service.LeaveService;
 import com.employeeManagement.demo.Service.adminService;
@@ -12,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.Thymeleaf;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,10 +26,12 @@ public class AdminController {
     private final adminService adminService;
     private final EmployeeService employeeService;
     private LeaveService leaveService;
-    public AdminController(adminService adminService , EmployeeService employeeService,LeaveService leaveService){
+    private AttendanceService attendanceService;
+    public AdminController(adminService adminService ,AttendanceService attendanceService, EmployeeService employeeService,LeaveService leaveService){
         this.adminService=adminService;
         this.employeeService=employeeService;
         this.leaveService=leaveService;
+        this.attendanceService=attendanceService;
     }
     @GetMapping("/login")
     public String showLogin() {
@@ -33,8 +39,11 @@ public class AdminController {
     }
     @PostMapping("/login")
     public String processLogin(@RequestParam String username,
-                               @RequestParam String password) {
+                               @RequestParam String password,
+                               HttpSession session) {
         if(adminService.validateAdmin(username, password)) {
+            // Store admin info in session
+            session.setAttribute("loggedInAdmin", adminService.getAdminByUsername(username));
             return "redirect:/admin/adminDashboard";// go to dashboard if success
         } else {
             return "redirect:/admin/login";// reload login page if failed
@@ -140,10 +149,27 @@ public class AdminController {
     public String departments() {
         return "departments"; // departments.html
     }
-
     @GetMapping("/attendance")
-    public String attendance() {
-        return "attendance"; // attendance.html
+    public String viewAttendance(Model model) {
+        List<employee> employees = employeeService.getAllEmployees(); // get all employees
+        Map<Long, Attendance> todayAttendance = new HashMap<>();
+
+        LocalDate today = LocalDate.now();
+        for (employee emp : employees) {
+            Attendance att = attendanceService.getAttendanceByEmployeeAndDate(emp.getId(), today);
+            todayAttendance.put(emp.getId(), att); // null if not yet marked
+        }
+
+        model.addAttribute("employees", employees);
+        model.addAttribute("todayAttendance", todayAttendance);
+        return "attendance";
+    }
+
+    @PostMapping("/attendance/mark")
+    public String markAttendance(@RequestParam Long employeeId,
+                                 @RequestParam boolean present) {
+        attendanceService.markAttendance(employeeId, present);
+        return "redirect:/admin/attendance";
     }
 
     @GetMapping("/payroll")
@@ -157,13 +183,40 @@ public class AdminController {
     }
 
     @GetMapping("/profile")
-    public String profile() {
-        return "profile"; // profile.html
+    public String profile(Model model, HttpSession session) {
+        Object obj = session.getAttribute("loggedInAdmin");
+        if(obj != null) {
+            model.addAttribute("admin", obj);
+            return "adminProfile";
+        } else {
+            return "redirect:/admin/login"; // if session expired
+        }
+    }
+    @GetMapping("/editProfile")
+    public String showEditProfile(Model model , HttpSession session){
+        Object obj = session.getAttribute("loggedInAdmin");
+        if(obj != null){
+            model.addAttribute("admin",obj);//prefilled form
+            return "editProfile";
+        }else {
+            return "redirect:/admin/login";//session expired
+        }
+    }
+    @PostMapping("/editProfile")
+    public String updateProfile(@ModelAttribute("Admin") admin adminFrom,HttpSession session){
+        admin currentAdmin =(admin) session.getAttribute("loggedInAdmin");
+        if (currentAdmin != null){
+            currentAdmin.setUsername(adminFrom.getUsername());
+            currentAdmin.setPassword(adminFrom.getPassword());
+            adminService.saveAdmin(currentAdmin);
+            session.setAttribute("loggedInAdmin",currentAdmin);
+            return "redirect:/admin/profile";
+        }return "redirect:/admin/login"; // if session expired
     }
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
-        return "redirect:/login"; // redirect to login page
+        return "redirect:/admin/login"; // redirect to login page
     }
 }

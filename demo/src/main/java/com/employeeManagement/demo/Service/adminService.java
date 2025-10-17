@@ -21,5 +21,12 @@ public class adminService {
         }
         return admin.isPresent() && admin.get().getPassword().equals(password);
     }
+    // Fetch admin by username for profile
+    public admin getAdminByUsername(String username) {
+        return adminRepo.findByUsername(username).orElse(null);
+    }
 
+    public void saveAdmin(admin currentAdmin) {
+        adminRepo.save(currentAdmin);
+    }
 }

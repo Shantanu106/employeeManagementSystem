@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Profile</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 40px; }
+    p { margin: 10px 0; }
+    button { margin-top: 20px; padding: 8px 12px; }
+  </style>
+</head>
+<body>
+<h1>Admin Profile</h1>
+
+<p><b>Username:</b> <span th:text="${admin.username}">adminUsername</span></p>
+<p><b>Password:</b> <span th:text="${admin.password}">adminPassword</span></p>
+
+<button onclick="window.location.href='/admin/editProfile'">Edit Profile</button>
+<button onclick="window.location.href='/admin/adminDashboard'">Back to Dashboard</button>
+</body>
+</html>

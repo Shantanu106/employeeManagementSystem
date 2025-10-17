@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Department</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 40px; }
+    input, button { margin: 10px 0; padding: 8px; display: block; width: 300px; }
+    label { margin-top: 10px; }
+  </style>
+</head>
+<body>
+<h1>Add Department</h1>
+<form th:action="@{/admin/departments-management/add}" method="post" th:object="${department}">
+  <label>Name:</label>
+  <input type="text" th:field="*{name}" placeholder="Department Name" required>
+
+  <label>Manager:</label>
+  <input type="text" th:field="*{manager}" placeholder="Manager Name" required>
+
+  <label>Action:</label>
+  <input type="text" th:field="*{action}" placeholder="Action" required>
+
+  <button type="submit">Add</button>
+</form>
+
+<button onclick="window.location.href='/admin/departments-management'">Back to Departments</button>
+</body>
+</html>
