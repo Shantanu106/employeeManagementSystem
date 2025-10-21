@@ -30,7 +30,7 @@ public class authController {
 
     @GetMapping("/employeeDashboard")
     public String employeeDashboard() {
-        return "employeeDashboard"; // resolves to employeeDashboard.html
+        return "employee-login"; // resolves to employeeDashboard.html
     }
     }
 

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Employee Profile</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 40px; }
+        input { display: block; margin: 10px 0; padding: 8px; width: 300px; }
+        button { margin-top: 20px; padding: 8px 12px; }
+        label { font-weight: bold; margin-top: 10px; display: block; }
+    </style>
+</head>
+<body>
+<h1>Edit Profile</h1>
+
+<form th:action="@{/employee/updateProfile}" th:object="${employee}" method="post">
+
+    <label>ID:</label>
+    <input type="text" th:field="*{id}" readonly />
+
+    <label>Department:</label>
+    <input type="text" th:field="*{department}" readonly />
+
+    <label>Name:</label>
+    <input type="text" th:field="*{name}" required />
+
+    <label>Email:</label>
+    <input type="email" th:field="*{email}" required />
+
+    <label>Phone:</label>
+    <input type="text" th:field="*{phone}" required />
+
+    <button type="submit">Save Changes</button>
+</form>
+
+
+<button onclick="window.location.href='/employee/dashboard'">Cancel</button>
+</body>
+</html>

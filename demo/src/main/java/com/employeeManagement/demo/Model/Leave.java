@@ -1,9 +1,9 @@
 package com.employeeManagement.demo.Model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
+
+import java.time.LocalDate;
 
 
 @Entity
@@ -11,13 +11,14 @@ import lombok.Data;
 @Table(name = "leaves")
 public class Leave {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Long employeeId;
     private String employeeName;
     private String department;
-    private String startDate;
-    private String endDate;
-    private String status; // Pending, Approved, Rejected
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private String status = "Pending"; // default status
     public  Leave(){}
 }

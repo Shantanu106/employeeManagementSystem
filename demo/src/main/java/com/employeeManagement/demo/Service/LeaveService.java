@@ -32,4 +32,11 @@ public class LeaveService {
     public List<Leave> getAllRequests() {
         return leaveRepository.findAll();
     }
+    public Leave applyLeave(Leave leave) {
+        leave.setStatus("Pending");
+        return leaveRepository.save(leave);
+    }
+    public List<Leave> getLeavesByEmployee(Long employeeId) {
+        return leaveRepository.findByEmployeeId(employeeId);
+    }
 }

@@ -1,5 +1,6 @@
 package com.employeeManagement.demo.Service;
 
+import com.employeeManagement.demo.Model.admin;
 import com.employeeManagement.demo.Model.employee;
 import com.employeeManagement.demo.Repository.employeeRepository;
 import org.springframework.stereotype.Service;
@@ -48,4 +49,26 @@ public class EmployeeService {
         return employeeRepository.searchByKeyword(keyword);
     }
 
+    public boolean validateEmployee(String email, String phone) {
+        System.out.println("Login attempt: " + email + " / " + phone);
+
+        // Find employee by email (used as username)
+        Optional<employee> emp = employeeRepository.findByEmail(email);
+
+        if (emp.isPresent()) {
+            System.out.println("Found employee: " + emp.get().getName() + " / " + emp.get().getPhone());
+        }else {
+            System.out.println("Employee not found for email: " + email);
+        }
+        boolean valid = emp.isPresent() && emp.get().getPhone().trim().equals(phone.trim());
+        System.out.println("Login valid? " + valid);
+//
+        // Return true if employee exists and phone matches (trimmed)
+        return valid;
+    }
+
+    public employee getEmployeeByEmail(String email) {
+       return employeeRepository.findByEmail(email).orElse(null);
+
+    }
 }

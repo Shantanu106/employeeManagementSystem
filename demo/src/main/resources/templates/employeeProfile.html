@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Employee Profile</title>
+</head>
+<body>
+<h1>Welcome, <span th:text="${loggedInEmployee.name}">Employee Name</span></h1>
+<p>Id: <span th:text="${loggedInEmployee.id}">Id</span></p>
+
+<p>Email: <span th:text="${loggedInEmployee.email}">Email</span></p>
+<p>Department: <span th:text="${loggedInEmployee.department}">Department</span></p>
+<p>Phone: <span th:text="${loggedInEmployee.phone}">Phone</span></p>
+<p>Salary: <span th:text="${loggedInEmployee.salary}">Salary</span></p>
+<p>Username: <span th:text="${loggedInEmployee.email}">Username</span></p>
+
+<div>
+
+  <a href="/employee/update"><button>Update</button></a>
+  <button type="button" onclick="window.location.href='/employee/dashboard'">
+    Back to Main Page
+  </button>
+</div>
+</body>
+</html>

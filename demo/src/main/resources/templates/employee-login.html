@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee Login</title>
+  <style>
+    body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, #4facfe, #00f2fe);
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0;
+    }
+
+    .login-container {
+        background-color: #fff;
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        width: 350px;
+        text-align: center;
+    }
+
+    h2 {
+        color: #333;
+        margin-bottom: 25px;
+    }
+
+    .input-group {
+        margin-bottom: 20px;
+        text-align: left;
+    }
+
+    label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 5px;
+        color: #444;
+    }
+
+    input {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 15px;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        background-color: #007bff;
+        color: #fff;
+        font-size: 16px;
+        font-weight: 600;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    .note {
+        margin-top: 15px;
+        font-size: 14px;
+        color: #666;
+    }
+
+    .note a {
+        color: #007bff;
+        text-decoration: none;
+    }
+
+    .note a:hover {
+        text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+<div class="login-container">
+  <h2>Employee Login</h2>
+  <form action="/employee/login" method="post">
+    <div class="input-group">
+      <label for="email">Email ID</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email" required>
+    </div>
+
+    <div class="input-group">
+      <label for="phone">Password</label>
+      <input type="password" id="phone" name="phone" placeholder="Enter your password (Password is your phone number)" required>
+    </div>
+
+    <button type="submit">Login</button>
+  </form>
+
+  <div class="note">
+    Forgot your password? <a href="https://mail.google.com/mail/?view=cm&fs=1&to=shantanumondal5935w@gmail.com&su=Password%20Reset%20Request&body=Hello,%20I%20forgot%20my%20password%20for%20my%20account." target="_blank">
+    Contact Admin
+  </a>
+
+
+  </div>
+</div>
+
+</body>
+</html>

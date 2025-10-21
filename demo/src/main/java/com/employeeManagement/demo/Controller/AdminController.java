@@ -42,7 +42,7 @@ public class AdminController {
                                @RequestParam String password,
                                HttpSession session) {
         if(adminService.validateAdmin(username, password)) {
-            // Store admin info in session
+            // Store admin info in session to show in profile
             session.setAttribute("loggedInAdmin", adminService.getAdminByUsername(username));
             return "redirect:/admin/adminDashboard";// go to dashboard if success
         } else {
