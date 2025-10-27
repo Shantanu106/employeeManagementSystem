@@ -1,29 +1,239 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Add Department</title>
-  <style>
-    body { font-family: Arial, sans-serif; padding: 40px; }
-    input, button { margin: 10px 0; padding: 8px; display: block; width: 300px; }
-    label { margin-top: 10px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Department</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --primary-glow: #00c6ff;
+            --secondary-glow: #0072ff;
+            --card-background: rgba(255, 255, 255, 0.1);
+            --border-color: rgba(255, 255, 255, 0.25);
+            --text-color: #f0f0f0;
+            --label-color: #d1d1d1;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #0c0a1a;
+            overflow: hidden; 
+            color: var(--text-color);
+        }
+
+        .background-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(150px);
+            opacity: 0.7;
+        }
+
+        .blob1 {
+            width: 500px;
+            height: 500px;
+            background: rgba(66, 135, 245, 0.6);
+            top: -150px;
+            left: -150px;
+            animation: move 25s infinite alternate;
+        }
+
+        .blob2 {
+            width: 400px;
+            height: 400px;
+            background: rgba(245, 66, 215, 0.6);
+            bottom: -100px;
+            right: -100px;
+            animation: move 30s infinite alternate-reverse;
+        }
+
+        @keyframes move {
+            from {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            to {
+                transform: translate(300px, 150px) rotate(360deg);
+            }
+        }
+
+        .glass-card {
+            width: 100%;
+            max-width: 480px;
+            background: var(--card-background);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px); 
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 8px 32px 0 var(--shadow-color);
+            padding: 40px;
+            text-align: center;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card-header h1 {
+            font-size: 2.2em;
+            font-weight: 700;
+            margin-bottom: 30px;
+            background: linear-gradient(90deg, #e0e0e0, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--label-color);
+            transition: color 0.3s;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 14px 14px 45px; 
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-color);
+            font-size: 1em;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-glow);
+            box-shadow: 0 0 15px rgba(0, 198, 255, 0.3);
+        }
+
+        .form-label {
+            position: absolute;
+            left: 45px;
+            top: 15px;
+            color: var(--label-color);
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus + .form-label,
+        .form-input:not(:placeholder-shown) + .form-label {
+            top: -10px;
+            left: 10px;
+            font-size: 0.8em;
+            background-color: #161329; 
+            padding: 0 5px;
+        }
+
+        .form-input:focus ~ .input-icon {
+            color: var(--primary-glow);
+        }
+        
+        button {
+            width: 100%;
+            padding: 15px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-fancy {
+            color: #fff;
+            background: linear-gradient(90deg, var(--primary-glow), var(--secondary-glow));
+            background-size: 200% 100%;
+            transition: background-position 0.5s;
+        }
+
+        .btn-fancy:hover {
+            background-position: 100% 0;
+            box-shadow: 0 0 20px rgba(0, 198, 255, 0.5);
+            transform: translateY(-3px);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+        }
+        .btn-secondary:hover {
+            background: var(--card-background);
+            border-color: var(--text-color);
+            transform: translateY(-3px);
+        }
+
+    </style>
 </head>
 <body>
-<h1>Add Department</h1>
-<form th:action="@{/admin/departments-management/add}" method="post" th:object="${department}">
-  <label>Name:</label>
-  <input type="text" th:field="*{name}" placeholder="Department Name" required>
 
-  <label>Manager:</label>
-  <input type="text" th:field="*{manager}" placeholder="Manager Name" required>
+<div class="background-container">
+    <div class="blob blob1"></div>
+    <div class="blob blob2"></div>
+</div>
 
-  <label>Action:</label>
-  <input type="text" th:field="*{action}" placeholder="Action" required>
+<div class="glass-card">
+    <div class="card-header">
+        <h1>Add Department</h1>
+    </div>
+    <form th:action="@{/admin/departments-management/add}" method="post" th:object="${department}">
+        
+        <div class="input-group">
+            <i class="input-icon fa-solid fa-building"></i>
+            <input type="text" id="name" th:field="*{name}" class="form-input" placeholder=" " required>
+            <label for="name" class="form-label">Department Name</label>
+        </div>
 
-  <button type="submit">Add</button>
-</form>
+        <div class="input-group">
+            <i class="input-icon fa-solid fa-user-tie"></i>
+            <input type="text" id="manager" th:field="*{manager}" class="form-input" placeholder=" " required>
+            <label for="manager" class="form-label">Manager Name</label>
+        </div>
 
-<button onclick="window.location.href='/admin/departments-management'">Back to Departments</button>
+        <div class="input-group">
+            <i class="input-icon fa-solid fa-tasks"></i>
+            <input type="text" id="action" th:field="*{action}" class="form-input" placeholder=" " required>
+            <label for="action" class="form-label">Primary Action/Role</label>
+        </div>
+
+        <button type="submit" class="btn-fancy">Add Department</button>
+        <button type="button" onclick="window.location.href='/admin/departments-management'" class="btn-secondary">Back to List</button>
+    </form>
+</div>
+
 </body>
 </html>
