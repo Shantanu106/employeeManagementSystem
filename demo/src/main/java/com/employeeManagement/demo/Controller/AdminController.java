@@ -46,7 +46,8 @@ public class AdminController {
             session.setAttribute("loggedInAdmin", adminService.getAdminByUsername(username));
             return "redirect:/admin/adminDashboard";// go to dashboard if success
         } else {
-            return "redirect:/admin/login";// reload login page if failed
+             // Append ?error=1 to trigger JS message
+            return "redirect:/admin/login?error=1";
         }
 
     }
