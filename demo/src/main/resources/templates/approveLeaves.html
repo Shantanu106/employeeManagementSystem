@@ -1,44 +1,147 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-  <meta charset="UTF-8">
-  <title>Approve Leave Requests</title>
-  <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    table { width: 100%; border-collapse: collapse; }
-    th, td { padding: 10px; border: 1px solid #ccc; text-align: left; }
-    a.button { text-decoration: none; padding: 5px 10px; background: #28a745; color: white; border-radius: 5px; }
-    a.reject { background: #dc3545; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Approve Leave Requests</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --success-color: #2ecc71;
+            --danger-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --text-color: #ffffff;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .glass-container {
+            width: 90%;
+            max-width: 1200px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            padding: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            font-weight: 600;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        thead th {
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        tbody tr {
+            transition: background-color 0.3s ease;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        td {
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .action-buttons a {
+            text-decoration: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 400;
+            transition: all 0.3s ease;
+            margin-right: 8px;
+        }
+
+        .button-approve {
+            background-color: var(--success-color);
+        }
+        
+        .button-approve:hover {
+            background-color: #27ae60;
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .button-reject {
+            background-color: var(--danger-color);
+        }
+        
+        .button-reject:hover {
+            background-color: #c0392b;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+            transform: translateY(-2px);
+        }
+    </style>
 </head>
 <body>
-<h1>Pending Leave Requests</h1>
-<table>
-  <thead>
-  <tr>
-    <th>ID</th>
-    <th>Employee</th>
-    <th>Department</th>
-    <th>From</th>
-    <th>To</th>
-    <th>Status</th>
-    <th>Actions</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr th:each="leave : ${leaves}">
-    <td th:text="${leave.id}"></td>
-    <td th:text="${leave.employeeName}"></td>
-    <td th:text="${leave.department}"></td>
-    <td th:text="${leave.startDate}"></td>
-    <td th:text="${leave.endDate}"></td>
-    <td th:text="${leave.status}"></td>
-    <td>
-      <a class="button" th:href="@{/admin/approveLeave/{id}(id=${leave.id})}">Approve</a>
-      <a class="reject" th:href="@{/admin/rejectLeave/{id}(id=${leave.id})}">Reject</a>
-    </td>
-  </tr>
-  </tbody>
-</table>
+
+<div class="glass-container">
+    <h1>Pending Leave Requests</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Employee</th>
+            <th>Department</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="leave : ${leaves}">
+            <td th:text="${leave.id}"></td>
+            <td th:text="${leave.employeeName}"></td>
+            <td th:text="${leave.department}"></td>
+            <td th:text="${leave.startDate}"></td>
+            <td th:text="${leave.endDate}"></td>
+            <td th:text="${leave.status}"></td>
+            <td class="action-buttons">
+                <a class="button-approve" th:href="@{/admin/approveLeave/{id}(id=${leave.id})}">Approve</a>
+                <a class="button-reject" th:href="@{/admin/rejectLeave/{id}(id=${leave.id})}">Reject</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
 </body>
 </html>
