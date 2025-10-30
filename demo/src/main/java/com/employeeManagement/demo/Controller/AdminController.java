@@ -178,10 +178,10 @@ public class AdminController {
         return "payroll"; // payroll.html
     }
 
-    @GetMapping("/reports")
-    public String reports() {
-        return "reports"; // reports.html
-    }
+//    @GetMapping("/reports")
+//    public String reports() {
+//        return "reports"; // reports.html
+//    }
 
     @GetMapping("/profile")
     public String profile(Model model, HttpSession session) {
@@ -220,4 +220,18 @@ public class AdminController {
         session.invalidate();
         return "redirect:/admin/login"; // redirect to login page
     }
+    @GetMapping("/reports")
+    public String showGenerateReportsPage(HttpSession session, Model model) {
+        admin adm = (admin) session.getAttribute("loggedInAdmin");
+
+        if (adm == null) {
+            return "redirect:/admin/login"; // ✅ redirect admin login
+        }
+
+        model.addAttribute("loggedInAdmin", adm);
+        return "generateReports";  // generateReports.html
+    }
+
+
+
 }

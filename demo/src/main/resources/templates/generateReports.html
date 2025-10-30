@@ -1,9 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Payroll - Admin Dashboard</title>
+  <title>Generate Reports</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -275,6 +273,9 @@
   </style>
 </head>
 <body>
+<button id="menuToggle" aria-label="Toggle Menu">
+  ☰
+</button>
 
 <nav id="sidebar" aria-label="Main Navigation">
   <h3>Admin Menu</h3>
@@ -313,20 +314,13 @@
     </a></li>
   </ul>
 </nav>
+</head>
 
 <div class="page-container">
-  <button id="menuToggle" aria-label="Toggle Navigation Menu">
-    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <line x1="3" y1="12" x2="21" y2="12"></line>
-      <line x1="3" y1="6" x2="21" y2="6"></line>
-      <line x1="3" y1="18" x2="21" y2="18"></line>
-    </svg>
-  </button>
-
   <main>
     <section class="content-card">
       <div class="coming-soon">
-        🚧 <strong>Payroll Module Coming Soon!</strong><br>
+        🚧 <strong>Report Module Coming Soon!</strong><br>
         Stay tuned — this feature is under development.
       </div>
     </section>
@@ -348,6 +342,6 @@
     alert('🚧 This feature will be available soon!');
   }
 </script>
-
 </body>
+
 </html>

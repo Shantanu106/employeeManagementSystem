@@ -146,6 +146,36 @@ public class EmployeeController {
         return "redirect:/employee/login";
     }
 
+    // Show attendance page
+    @GetMapping("/attendance")
+    public String showAttendancePage(HttpSession session, Model model) {
+        employee emp = (employee) session.getAttribute("loggedInEmployee");
+
+        if (emp == null) {
+            // Session expired or not logged in
+            return "redirect:/employee/login";
+        }
+
+        model.addAttribute("loggedInEmployee", emp);
+
+        // Later you can fetch attendance records from AttendanceService or Repository
+        // Example: model.addAttribute("attendanceList", attendanceService.getAttendanceByEmployeeId(emp.getId()));
+
+        return "attendancePage"; // attendancePage.html (create this in templates folder)
+    }
+
+    // Show payment details (Coming Soon)
+    @GetMapping({"/payment-details", "/payment"})
+    public String showPaymentDetails(HttpSession session, Model model) {
+        employee emp = (employee) session.getAttribute("loggedInEmployee");
+
+        if (emp == null) {
+            return "redirect:/employee/login";
+        }
+
+        model.addAttribute("loggedInEmployee", emp);
+        return "paymentSection";
+    }
 
 
 
