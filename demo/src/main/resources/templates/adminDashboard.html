@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Admin Dashboard - New Layout</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,33 +11,38 @@
 
     <style>
         :root {
-
             --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             --font-size-h1: clamp(1.75rem, 1.25rem + 2vw, 2.5rem);
-            --font-size-card-stat: clamp(2rem, 1rem + 3vw, 3rem);
+            --font-size-card-stat: clamp(1.75rem, 0.75rem + 3vw, 2.5rem);
+
+            --sidebar-width: 240px;
+            --sidebar-width-collapsed: 80px;
 
             --bg-main: #f3f4f8;
-            --bg-content: rgba(255, 255, 255, 0.6);
-            --bg-sidebar: rgba(30, 41, 59, 0.8);
+            --bg-content: rgba(255, 255, 255, 0.7);
+            --bg-sidebar: rgba(30, 41, 59, 0.9);
             --text-primary: #0f172a;
             --text-secondary: #64748b;
             --text-inverted: #f8fafc;
             --accent-primary: #3b82f6;
             --accent-primary-hover: #2563eb;
-            --border-color: rgba(0, 0, 0, 0.07);
-            --shadow-color: rgba(0, 0, 0, 0.1);
+            --border-color: rgba(0, 0, 0, 0.08);
+            --shadow-color: rgba(0, 0, 0, 0.05);
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
         }
 
         body.dark-theme {
             --bg-main: #0f172a;
-            --bg-content: rgba(30, 41, 59, 0.5);
-            --bg-sidebar: rgba(15, 23, 42, 0.7);
+            --bg-content: rgba(30, 41, 59, 0.6);
+            --bg-sidebar: rgba(15, 23, 42, 0.85);
             --text-primary: #f8fafc;
             --text-secondary: #94a3b8;
-            --text-inverted: #0f172a;
+            --text-inverted: #f8fafc;
             --border-color: rgba(255, 255, 255, 0.1);
-            --shadow-color: rgba(0, 0, 0, 0.3);
+            --shadow-color: rgba(0, 0, 0, 0.2);
         }
+
         *, *::before, *::after {
             box-sizing: border-box;
             margin: 0;
@@ -52,297 +57,470 @@
         }
 
         .page-container {
-            transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
         }
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
         #sidebar {
-            width: 240px;
+            width: var(--sidebar-width);
             height: 100vh;
             position: fixed;
             top: 0;
-            left: -240px;
+            left: 0;
             z-index: 1000;
 
             background: var(--bg-sidebar);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border-right: 1px solid var(--border-color);
 
             display: flex;
             flex-direction: column;
-            padding: 1.5rem 1rem;
+            padding: 1rem 0.75rem;
             color: var(--text-inverted);
-            transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow-y: auto;
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-x: hidden;
         }
 
-        #sidebar.active {
-            left: 0;
-        }
-
-        #sidebar h3 {
+        #sidebar .logo {
             font-weight: 700;
+            font-size: 1.5rem;
             text-align: center;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 0;
             margin-bottom: 1rem;
+            white-space: nowrap;
         }
 
-        #sidebar ul { list-style: none; }
-        #sidebar ul li a {
+        #sidebar nav {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        #sidebar nav ul { list-style: none; }
+        #sidebar nav ul li a {
             display: flex;
             align-items: center;
             gap: 1rem;
             padding: 0.8rem 1rem;
-            border-radius: 6px;
+            border-radius: 8px;
             margin-bottom: 0.25rem;
             font-weight: 500;
             transition: background-color 0.2s ease, color 0.2s ease;
+            white-space: nowrap;
+            color: inherit;
+            text-decoration: none;
         }
 
-        #sidebar ul li a:hover, #sidebar ul li a:focus-visible {
+        #sidebar nav ul li a:hover, #sidebar nav ul li a.active {
             background-color: var(--accent-primary);
             color: var(--text-inverted);
-            outline: none;
         }
-        #sidebar::-webkit-scrollbar { width: 6px; }
-        #sidebar::-webkit-scrollbar-track { background: transparent; }
-        #sidebar::-webkit-scrollbar-thumb {
-            background-color: rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
+        #sidebar nav ul li a svg {
+            flex-shrink: 0;
         }
+
+        #sidebar.collapsed {
+            width: var(--sidebar-width-collapsed);
+        }
+        #sidebar.collapsed .logo {
+            font-size: 1.25rem;
+        }
+        #sidebar.collapsed .logo span { display: none; }
+        #sidebar.collapsed nav ul li a span { display: none; }
+        #sidebar.collapsed nav ul li a {
+            justify-content: center;
+            padding: 0.8rem;
+        }
+
         main {
+            width: 100%;
             padding: 2rem;
+            margin-left: var(--sidebar-width);
+            transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        main.collapsed {
+            margin-left: var(--sidebar-width-collapsed);
         }
 
-        .page-container.shifted {
-            margin-left: 240px;
-        }
-
-        .dashboard-header {
+        .main-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 2rem;
         }
+        .main-header .header-left { display: flex; align-items: center; gap: 1rem; }
 
-        .dashboard-header h1 {
-            font-size: var(--font-size-h1);
-            font-weight: 800;
-        }
-
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .card {
-            background: var(--bg-content);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            padding: 1.5rem;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 8px 32px 0 var(--shadow-color);
-            color: var(--text-secondary);
-            font-weight: 500;
-            opacity: 0;
-            animation: slideInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        }
-        .card:nth-child(1) { animation-delay: 0.1s; }
-        .card:nth-child(2) { animation-delay: 0.2s; }
-        .card:nth-child(3) { animation-delay: 0.3s; }
-        .card:nth-child(4) { animation-delay: 0.4s; }
-
-        .card span {
-            display: block;
-            font-size: var(--font-size-card-stat);
-            font-weight: 800;
-            color: var(--text-primary);
-            margin-top: 0.5rem;
-        }
-        .quick-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .quick-actions button {
-            padding: 0.75rem 1.5rem;
-            font-size: 1rem;
-            font-weight: 600;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            background-color: var(--accent-primary);
-            color: white;
-            box-shadow: 0 4px 15px -5px var(--accent-primary);
-            transition: all 0.2s ease;
-        }
-
-        .quick-actions button:hover {
-            background-color: var(--accent-primary-hover);
-            transform: translateY(-3px);
-            box-shadow: 0 7px 20px -5px var(--accent-primary);
-        }
-
-        .quick-actions button:focus-visible {
-            outline: 3px solid var(--accent-primary-hover);
-            outline-offset: 2px;
-        }
-
-        #menuToggle, #theme-toggle {
-            display: grid;
+        #menuToggle {
+            display: none;
             place-items: center;
+            width: 40px;
+            height: 40px;
             border: 1px solid var(--border-color);
             border-radius: 50%;
             cursor: pointer;
             background: var(--bg-content);
-            backdrop-filter: blur(5px);
-            transition: all 0.2s ease;
+        }
+
+        .search-bar {
+            position: relative;
+        }
+        .search-bar input {
+            width: 300px;
+            padding: 0.6rem 1rem 0.6rem 2.5rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-content);
             color: var(--text-primary);
         }
-        #menuToggle:hover, #theme-toggle:hover {
-            transform: scale(1.1);
-            color: var(--accent-primary);
-            border-color: var(--accent-primary);
+        .search-bar svg {
+            position: absolute;
+            left: 0.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
         }
 
-        #menuToggle {
-            position: fixed;
-            top: 1rem;
-            left: 1rem;
-            z-index: 1001;
-            width: 50px;
-            height: 50px;
-        }
+        .header-right { display: flex; align-items: center; gap: 1rem; }
 
-        #theme-toggle {
+        .icon-button {
+            display: grid;
+            place-items: center;
             width: 40px;
             height: 40px;
-            font-size: 1.25rem;
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            cursor: pointer;
+            background: var(--bg-content);
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            position: relative;
         }
+
+        .dashboard-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+        }
+        .primary-column {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+        }
+        .card {
+            background: var(--bg-content);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 20px 0 var(--shadow-color);
+        }
+
+        .stat-card {
+            display: flex;
+            flex-direction: column;
+        }
+        .stat-card .icon {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent-primary);
+        }
+        .stat-card .label { color: var(--text-secondary); font-weight: 500; }
+        .stat-card .value {
+            font-size: var(--font-size-card-stat);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-top: 0.25rem;
+        }
+        .stat-card[data-type="pending"] .icon { color: var(--warning-color); }
+
+        .secondary-column h3 { margin-bottom: 1rem; font-weight: 600; }
+        .activity-list .activity-item {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .activity-list .activity-item:last-child { border-bottom: none; }
+
+        .activity-item .icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            flex-shrink: 0;
+        }
+        .activity-item .icon.success { background-color: rgba(16, 185, 129, 0.1); color: var(--success-color); }
+        .activity-item .icon.warning { background-color: rgba(245, 158, 11, 0.1); color: var(--warning-color); }
+
+        .activity-item .details p { font-weight: 500; }
+        .activity-item .details span { font-size: 0.875rem; color: var(--text-secondary); }
+        .activity-item .action-btn {
+            margin-left: auto;
+            padding: 0.5rem 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            background-color: var(--accent-primary);
+            color: white;
+            transition: background-color 0.2s ease;
+        }
+        .activity-item .action-btn:hover { background-color: var(--accent-primary-hover); }
+
         .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
+            position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+            overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .card { animation: fadeIn 0.5s ease forwards; }
+
+        @media (max-width: 1200px) {
+            .dashboard-layout {
+                grid-template-columns: 1fr;
+            }
         }
 
         @media (max-width: 768px) {
-            main { padding: 1.5rem 1rem; }
-            .page-container.shifted { margin-left: 0; }
-            .dashboard-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+            main {
+                margin-left: 0;
+                padding: 1.5rem 1rem;
+            }
+            #sidebar {
+                left: calc(-1 * var(--sidebar-width));
+            }
+            #sidebar.active {
+                left: 0;
+                width: var(--sidebar-width);
+            }
+            #sidebar.collapsed {
+                width: var(--sidebar-width);
+            }
+             #sidebar.collapsed nav ul li a span { display: inline; }
+             #sidebar.collapsed nav ul li a { justify-content: flex-start; }
+
+            .main-header .search-bar { display: none; }
+            #menuToggle { display: grid; }
         }
     </style>
 </head>
 <body>
 
-<nav id="sidebar" aria-label="Main Navigation">
-    <h3>Admin Menu</h3>
-    <ul>
-        <li><a href="/admin">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-            <span>Dashboard</span>
-        </a></li>
-        <li><a href="/admin/departments">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-5"></path><path d="M9 17H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-4"></path><path d="M15 17h-2a1 1 0 0 0-1 1v4h4v-4a1 1 0 0 0-1-1z"></path></svg>
-            <span>Departments</span>
-        </a></li>
-        <li><a href="/admin/attendance">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line><path d="m9 16 2 2 4-4"></path></svg>
-            <span>Attendance</span>
-        </a></li>
-        <li><a href="/admin/payroll">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"></rect><path d="M3 10h18"></path><path d="M7 15h.01"></path></svg>
-            <span>Payroll</span>
-        </a></li>
-        <li><a href="/admin/reports">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 2H8.6c-.4 0-.8.2-1.1.5-.3.3-.5.7-.5 1.1V21c0 .8.7 1.5 1.5 1.5s1.5-.7 1.5-1.5V3h6v18c0 .8.7 1.5 1.5 1.5s1.5-.7 1.5-1.5V3.6c0-.4-.2-.8-.5-1.1-.3-.3-.7-.5-1.1-.5z"></path></svg>
-            <span>Reports</span>
-        </a></li>
-        <li><a href="/admin/profile">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-            <span>Profile</span>
-        </a></li>
-        <li><a href="/admin/logout">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-            <span>Logout</span>
-        </a></li>
-    </ul>
-</nav>
-
 <div class="page-container">
-    <button id="menuToggle" aria-label="Toggle Navigation Menu" aria-expanded="false" aria-controls="sidebar">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-    </button>
+    <aside id="sidebar" aria-label="Main Navigation">
+        <div class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 0.5rem;"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+            <span>AdminPanel</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/admin" class="active">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                    <span>Dashboard</span>
+                </a></li>
+                <li><a href="/admin/departments">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-5"></path><path d="M9 17H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-4"></path><path d="M15 17h-2a1 1 0 0 0-1 1v4h4v-4a1 1 0 0 0-1-1z"></path></svg>
+                    <span>Departments</span>
+                </a></li>
+                <li><a href="/admin/attendance">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line><path d="m9 16 2 2 4-4"></path></svg>
+                    <span>Attendance</span>
+                </a></li>
+                <li><a href="/admin/payroll">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"></rect><path d="M3 10h18"></path><path d="M7 15h.01"></path></svg>
+                    <span>Payroll</span>
+                </a></li>
+                <li><a href="/admin/reports">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 2H8.6c-.4 0-.8.2-1.1.5-.3.3-.5.7-.5 1.1V21c0 .8.7 1.5 1.5 1.5s1.5-.7 1.5-1.5V3h6v18c0 .8.7 1.5 1.5 1.5s1.5-.7 1.5-1.5V3.6c0-.4-.2-.8-.5-1.1-.3-.3-.7-.5-1.1-.5z"></path></svg>
+                    <span>Reports</span>
+                </a></li>
+            </ul>
+            <ul>
+                <li><a href="/admin/profile">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <span>Profile</span>
+                </a></li>
+                <li><a href="/admin/logout">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    <span>Logout</span>
+                </a></li>
+            </ul>
+        </nav>
+    </aside>
 
     <main id="main-content">
-        <header class="dashboard-header">
-            <h1>Welcome, Admin</h1>
-            <button id="theme-toggle" aria-label="Toggle Dark Mode">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-            </button>
+        <header class="main-header">
+            <div class="header-left">
+                <button id="menuToggle" aria-label="Toggle Navigation Menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </button>
+                <div class="search-bar">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input type="text" placeholder="Search employees, reports...">
+                </div>
+            </div>
+            <div class="header-right">
+                <button id="theme-toggle" class="icon-button" aria-label="Toggle Dark Mode">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                </button>
+            </div>
         </header>
 
-        <section aria-labelledby="overview-title">
-            <h2 id="overview-title" class="sr-only">Dashboard Overview</h2>
-            <div class="dashboard-grid">
-                <div class="card">Total Employees: <span id="totalEmployees">0</span></div>
-                <div class="card">On Leave Today: <span id="onLeave">0</span></div>
-                <div class="card">Departments: <span id="departments">0</span></div>
-                <div class="card">Pending Leave Requests: <span id="pendingRequests">0</span></div>
+        <div class="dashboard-layout">
+            <div class="primary-column">
+                <section aria-labelledby="overview-title">
+                    <h1 id="overview-title" class="sr-only">Dashboard Overview</h1>
+                    <div class="stats-grid">
+                        <div class="card stat-card">
+                            <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div>
+                            <span class="label">Total Employees</span>
+                            <span id="totalEmployees" class="value">0</span>
+                        </div>
+                        <div class="card stat-card">
+                            <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="18" y1="8" x2="23" y2="13"></line><line x1="23" y1="8" x2="18" y2="13"></line></svg></div>
+                            <span class="label">On Leave Today</span>
+                            <span id="onLeave" class="value">0</span>
+                        </div>
+                        <div class="card stat-card" data-type="pending">
+                            <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg></div>
+                            <span class="label">Pending Requests</span>
+                            <span id="pendingRequests" class="value">0</span>
+                        </div>
+                        <div class="card stat-card">
+                            <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></div>
+                            <span class="label">Departments</span>
+                            <span id="departments" class="value">0</span>
+                        </div>
+                    </div>
+                </section>
             </div>
-        </section>
 
-        <section aria-labelledby="actions-title">
-            <h2 id="actions-title" class="sr-only">Quick Actions</h2>
-            <div class="quick-actions">
-                <button onclick="window.location.href='/admin/addEmployee'">Add Employee</button>
-                <button onclick="window.location.href='/admin/employees'">View All Employees</button>
-                <button onclick="window.location.href='/admin/approveLeaves'">Approve Leave</button>
-                <button onclick="window.location.href='/admin/generateReports'">Generate Reports</button>
-                <button onclick="window.location.href='/admin/payroll'">Payroll</button>
+            <div class="secondary-column">
+                <section class="card" aria-labelledby="activity-title">
+                    <h3 id="activity-title">Pending Tasks</h3>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <div class="icon warning">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+                            </div>
+                            <div class="details">
+                                <p>Approve Leave Requests</p>
+                                <span id="pendingRequestsText">0 new requests</span>
+                            </div>
+                            <button class="action-btn" onclick="window.location.href='/admin/approveLeaves'">View</button>
+                        </div>
+                        <div class="activity-item">
+                            <div class="icon success">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
+                            </div>
+                            <div class="details">
+                                <p>Generate Payroll</p>
+                                <span>For October 2025</span>
+                            </div>
+                            <button class="action-btn" onclick="window.location.href='/admin/payroll'">Process</button>
+                        </div>
+                        <div class="activity-item">
+                            <div class="icon success">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                            </div>
+                            <div class="details">
+                                <p>Add New Employee</p>
+                                <span>Onboard new hires</span>
+                            </div>
+                            <button class="action-btn" onclick="window.location.href='/admin/addEmployee'">Add</button>
+                        </div>
+                        <div class="activity-item">
+                            <div class="icon success">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                            </div>
+                            <div class="details">
+                                <p>View All Employees</p>
+                                <span>Manage employee data</span>
+                            </div>
+                            <button class="action-btn" onclick="window.location.href='/admin/employees'">Manage</button>
+                        </div>
+                        <div class="activity-item">
+                            <div class="icon success">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                            </div>
+                            <div class="details">
+                                <p>Generate Reports</p>
+                                <span>Create monthly summaries</span>
+                            </div>
+                            <button class="action-btn" onclick="window.location.href='/admin/reports'">Create</button>
+                        </div>
+                    </div>
+                </section>
             </div>
-        </section>
+        </div>
     </main>
 </div>
 
 <script>
-    const sidebar = document.getElementById('sidebar');
-  const mainContent = document.querySelector('main');
-  const toggleBtn = document.getElementById('menuToggle');
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- Sidebar Toggle ---
+        const sidebar = document.getElementById('sidebar');
+        const pageContainer = document.querySelector('.page-container');
+        const menuToggle = document.getElementById('menuToggle');
 
-  toggleBtn.addEventListener('click', () => {
-      sidebar.classList.toggle('active');
-      mainContent.classList.toggle('shifted');
-  });
-  fetch('/admin/stats')
-    .then(response => response.json())
-    .then(data => {
-        document.getElementById('totalEmployees').innerText = data.totalEmployees;
-        document.getElementById('onLeave').innerText = data.onLeave;
-        document.getElementById('departments').innerText = data.departments;
-        document.getElementById('pendingRequests').innerText = data.pendingRequests;
-    })
-    .catch(error => console.error('Error fetching stats:', error));
+        menuToggle.addEventListener('click', () => {
+            const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
+            sidebar.classList.toggle('active');
+            pageContainer.classList.toggle('shifted');
+            menuToggle.setAttribute('aria-expanded', !isExpanded);
+        });
+
+        // --- Theme Toggle ---
+        const themeToggle = document.getElementById('theme-toggle');
+        const currentTheme = localStorage.getItem('theme');
+
+        themeToggle.addEventListener('click', () => {
+        body.classList.toggle('dark-theme');
+        if (body.classList.contains('dark-theme')) {
+          localStorage.setItem('theme', 'dark');
+        } else {
+          localStorage.setItem('theme', 'light');
+        }
+      });
+
+      if (localStorage.getItem('theme') === 'dark') {
+        body.classList.add('dark-theme');
+      }
+
+        // ======= Fetch Dashboard Stats =======
+      fetch('/admin/stats')
+        .then(response => response.json())
+        .then(data => {
+          const pendingCount = data.pendingRequests || 0;
+          document.getElementById('totalEmployees').innerText = data.totalEmployees || 0;
+          document.getElementById('onLeave').innerText = data.onLeave || 0;
+          document.getElementById('departments').innerText = data.departments || 0;
+          document.getElementById('pendingRequests').innerText = pendingCount;
+          document.getElementById('pendingRequestsText').innerText = `${pendingCount} new requests`;
+        })
+        .catch(error => console.error('Error fetching stats:', error));
+
+      // ======= Auto Sidebar Behavior =======
+      window.addEventListener('resize', () => {
+        if (isDesktop()) {
+          sidebar.classList.remove('active');
+        } else {
+          sidebar.classList.remove('collapsed');
+          mainContent.classList.remove('collapsed');
+        }
+      });
+    });
 </script>
 
 
