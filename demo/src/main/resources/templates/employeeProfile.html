@@ -1,25 +1,240 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Employee Profile</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6a11cb;
+            --secondary-color: #2575fc;
+            --text-color: #e0e0e0;
+            --text-muted: rgba(224, 224, 224, 0.7);
+            --glass-bg-color: rgba(255, 255, 255, 0.1);
+            --glass-border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Poppins", sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #1a1a2e;
+            overflow: hidden;
+            color: var(--text-color);
+            padding: 20px;
+        }
+
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            filter: blur(80px);
+            opacity: 0.5;
+        }
+
+        .blob1 {
+            width: 400px;
+            height: 400px;
+            top: -150px;
+            left: -150px;
+            animation: move 15s infinite alternate;
+        }
+
+        .blob2 {
+            width: 300px;
+            height: 300px;
+            bottom: -100px;
+            right: -100px;
+            animation: move 18s infinite alternate-reverse;
+        }
+
+        @keyframes move {
+            from { transform: translate(0, 0) rotate(0deg); }
+            to { transform: translate(200px, 100px) rotate(360deg); }
+        }
+
+        .profile-card {
+            background: var(--glass-bg-color);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            border: 1px solid var(--glass-border-color);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 550px;
+            text-align: center;
+        }
+        
+        .profile-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 50px;
+            color: #fff;
+            margin-bottom: 20px;
+            border: 3px solid var(--glass-border-color);
+        }
+        
+        .profile-header h1 {
+            font-weight: 700;
+            font-size: 2.2em;
+            color: #fff;
+        }
+        
+        .profile-header p {
+            font-size: 1.1em;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .profile-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            text-align: left;
+            margin-bottom: 35px;
+        }
+        
+        .detail-item {
+            background: rgba(0,0,0,0.2);
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .detail-item .label {
+            display: block;
+            font-size: 0.9em;
+            font-weight: 300;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+        }
+        
+        .detail-item .value {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #fff;
+            word-wrap: break-word;
+        }
+        .detail-item.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .profile-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            text-decoration: none;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--glass-border-color);
+        }
+        .btn-secondary:hover {
+            background: var(--glass-bg-color);
+        }
+
+    </style>
 </head>
 <body>
-<h1>Welcome, <span th:text="${loggedInEmployee.name}">Employee Name</span></h1>
-<p>Id: <span th:text="${loggedInEmployee.id}">Id</span></p>
 
-<p>Email: <span th:text="${loggedInEmployee.email}">Email</span></p>
-<p>Department: <span th:text="${loggedInEmployee.department}">Department</span></p>
-<p>Phone: <span th:text="${loggedInEmployee.phone}">Phone</span></p>
-<p>Salary: <span th:text="${loggedInEmployee.salary}">Salary</span></p>
-<p>Username: <span th:text="${loggedInEmployee.email}">Username</span></p>
-
-<div>
-
-  <a href="/employee/update"><button>Update</button></a>
-  <button type="button" onclick="window.location.href='/employee/dashboard'">
-    Back to Main Page
-  </button>
+<div class="background">
+    <div class="blob blob1"></div>
+    <div class="blob blob2"></div>
 </div>
+
+<div class="profile-card">
+    <div class="profile-header">
+        <div class="avatar">
+            <i class="fas fa-user"></i>
+        </div>
+        <h1 th:text="${loggedInEmployee.name}">Employee Name</h1>
+        <p th:text="${loggedInEmployee.department}">Department</p>
+    </div>
+
+    <div class="profile-details">
+        <div class="detail-item">
+            <span class="label">Employee ID</span>
+            <span class="value" th:text="${loggedInEmployee.id}">Id</span>
+        </div>
+        <div class="detail-item">
+            <span class="label">Phone Number</span>
+            <span class="value" th:text="${loggedInEmployee.phone}">Phone</span>
+        </div>
+        <div class="detail-item full-width">
+            <span class="label">Email / Username</span>
+            <span class="value" th:text="${loggedInEmployee.email}">Email</span>
+        </div>
+        <div class="detail-item full-width">
+            <span class="label">Salary</span>
+            <span class="value" th:text="'$' + ${#numbers.formatDecimal(loggedInEmployee.salary, 1, 'COMMA', 2, 'POINT')}">Salary</span>
+        </div>
+    </div>
+
+    <div class="profile-actions">
+        <a href="/employee/update" class="btn btn-primary">
+            <i class="fas fa-edit"></i> Update Profile
+        </a>
+        <a href="/employee/dashboard" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+    </div>
+
+</div>
+
 </body>
 </html>
