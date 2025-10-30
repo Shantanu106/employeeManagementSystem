@@ -1,209 +1,209 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Edit Admin Profile</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
+  <meta charset="UTF-8">
+  <title>Edit Admin Profile</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
 
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #f0f2f5; 
-        }
+    body {
+        font-family: 'Inter', sans-serif;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f0f2f5;
+    }
+    .page-container {
+        display: flex;
+        width: 100%;
+        max-width: 900px;
+        min-height: 550px;
+        background: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        animation: fadeIn 0.8s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: scale(0.95); }
+        to { opacity: 1; transform: scale(1); }
+    }
+
+    .left-panel {
+        flex-basis: 40%;
+        background-image: linear-gradient(160deg, #2c3e50 0%, #34495e 100%);
+        padding: 50px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        color: #ffffff;
+    }
+
+    .left-panel h2 {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .left-panel p {
+        font-size: 15px;
+        line-height: 1.6;
+        color: rgba(255, 255, 255, 0.85);
+    }
+    .right-panel {
+        flex-basis: 60%;
+        padding: 50px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    h1 {
+        color: #1e293b;
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 35px;
+        text-align: left;
+    }
+    form {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: slideUpFadeIn 0.5s ease-out forwards;
+    }
+
+    .form-group:nth-child(1) { animation-delay: 0.1s; }
+    .form-group:nth-child(2) { animation-delay: 0.2s; }
+    .button-group { animation-delay: 0.3s; }
+
+    @keyframes slideUpFadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    label {
+        color: #475569;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    input {
+        padding: 14px 16px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        font-size: 15px;
+        font-family: inherit;
+        color: #1e293b;
+        background-color: #f8fafc;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    input:focus {
+        outline: none;
+        border-color: #f59e0b;
+        box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+    }
+    .button-group {
+        display: flex;
+        gap: 12px;
+        margin-top: 15px;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: slideUpFadeIn 0.5s ease-out forwards;
+    }
+
+    button {
+        flex: 1;
+        padding: 14px 24px;
+        font-size: 15px;
+        font-weight: 600;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-submit {
+        background-color: #f59e0b;
+        color: #ffffff;
+    }
+
+    .btn-submit:hover {
+        background-color: #d97706;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px -5px rgba(245, 158, 11, 0.4);
+    }
+
+    .btn-cancel {
+        background-color: #e2e8f0;
+        color: #475569;
+    }
+
+    .btn-cancel:hover {
+        background-color: #cbd5e1;
+    }
+    @media (max-width: 900px) {
+        body { align-items: flex-start; }
         .page-container {
-            display: flex;
-            width: 100%;
-            max-width: 900px;
-            min-height: 550px;
-            background: #ffffff;
-            border-radius: 20px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            animation: fadeIn 0.8s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-       
-        .left-panel {
-            flex-basis: 40%;
-            background-image: linear-gradient(160deg, #2c3e50 0%, #34495e 100%); 
-            padding: 50px;
-            display: flex;
             flex-direction: column;
-            justify-content: center;
-            color: #ffffff;
+            min-height: auto;
+            max-width: 500px;
+            margin: 20px;
         }
-
-        .left-panel h2 {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 10px;
+        .left-panel, .right-panel {
+            flex-basis: auto;
+            padding: 40px;
         }
-
-        .left-panel p {
-            font-size: 15px;
-            line-height: 1.6;
-            color: rgba(255, 255, 255, 0.85);
-        }
-        .right-panel {
-            flex-basis: 60%;
-            padding: 50px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        h1 {
-            color: #1e293b;
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 35px;
-            text-align: left;
-        }
-        form {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: slideUpFadeIn 0.5s ease-out forwards;
-        }
-
-        .form-group:nth-child(1) { animation-delay: 0.1s; }
-        .form-group:nth-child(2) { animation-delay: 0.2s; }
-        .button-group { animation-delay: 0.3s; }
-
-        @keyframes slideUpFadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        label {
-            color: #475569;
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        input {
-            padding: 14px 16px;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            font-size: 15px;
-            font-family: inherit;
-            color: #1e293b;
-            background-color: #f8fafc;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: #f59e0b;
-            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
-        }
-        .button-group {
-            display: flex;
-            gap: 12px;
-            margin-top: 15px;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: slideUpFadeIn 0.5s ease-out forwards;
-        }
-
-        button {
-            flex: 1;
-            padding: 14px 24px;
-            font-size: 15px;
-            font-weight: 600;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-submit {
-            background-color: #f59e0b;
-            color: #ffffff;
-        }
-
-        .btn-submit:hover {
-            background-color: #d97706;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px -5px rgba(245, 158, 11, 0.4);
-        }
-
-        .btn-cancel {
-            background-color: #e2e8f0;
-            color: #475569;
-        }
-
-        .btn-cancel:hover {
-            background-color: #cbd5e1;
-        }
-        @media (max-width: 900px) {
-            body { align-items: flex-start; }
-            .page-container {
-                flex-direction: column;
-                min-height: auto;
-                max-width: 500px;
-                margin: 20px;
-            }
-            .left-panel, .right-panel {
-                flex-basis: auto;
-                padding: 40px;
-            }
-            .left-panel { text-align: center; }
-            h1 { font-size: 28px; }
-        }
-    </style>
+        .left-panel { text-align: center; }
+        h1 { font-size: 28px; }
+    }
+  </style>
 </head>
 <body>
 
 <div class="page-container">
-    <div class="left-panel">
-        <h2>Admin Security</h2>
-        <p>Update your credentials regularly to keep your account secure. Use a strong, unique password.</p>
-    </div>
-    <div class="right-panel">
-        <h1>Edit Profile</h1>
-        <form th:action="@{/admin/editProfile}" th:object="${admin}" method="post">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" th:field="*{username}" required />
-            </div>
+  <div class="left-panel">
+    <h2>Admin Security</h2>
+    <p>Update your credentials regularly to keep your account secure. Use a strong, unique password.</p>
+  </div>
+  <div class="right-panel">
+    <h1>Edit Profile</h1>
+    <form th:action="@{/admin/editProfile}" th:object="${admin}" method="post">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" th:field="*{username}" required />
+      </div>
 
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" th:field="*{password}" required />
-            </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" th:field="*{password}" required />
+      </div>
 
-            <div class="button-group">
-                <button type="submit" class="btn-submit">Save Changes</button>
-                <button type="button" class="btn-cancel" onclick="window.location.href='/admin/profile'">Cancel</button>
-            </div>
-        </form>
-    </div>
+      <div class="button-group">
+        <button type="submit" class="btn-submit">Save Changes</button>
+        <button type="button" class="btn-cancel" onclick="window.location.href='/admin/profile'">Cancel</button>
+      </div>
+    </form>
+  </div>
 </div>
 
 </body>
