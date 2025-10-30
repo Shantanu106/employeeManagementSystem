@@ -2,18 +2,206 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employee Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6a11cb;
+            --secondary-color: #2575fc;
+            --text-color: #e0e0e0;
+            --glass-bg-color: rgba(255, 255, 255, 0.1);
+            --glass-border-color: rgba(255, 255, 255, 0.4);
+            --button-text-color: #fff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Poppins", sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: #1a1a2e;
+            overflow: hidden;
+            color: var(--text-color);
+            position: relative; 
+        }
+
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            filter: blur(80px);
+            opacity: 0.5;
+        }
+
+        .blob1 {
+            width: 400px;
+            height: 400px;
+            top: -150px;
+            left: -150px;
+            animation: move 15s infinite alternate;
+        }
+
+        .blob2 {
+            width: 300px;
+            height: 300px;
+            bottom: -100px;
+            right: -100px;
+            animation: move 18s infinite alternate-reverse;
+        }
+
+        @keyframes move {
+            from {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            to {
+                transform: translate(200px, 100px) rotate(360deg);
+            }
+        }
+
+        .dashboard-container {
+            background: var(--glass-bg-color);
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            border: 1px solid var(--glass-border-color);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px); 
+            width: 90%;
+            max-width: 600px; 
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            font-weight: 700;
+            font-size: 2.5em;
+            margin-bottom: 40px;
+            color: #fff;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        h1 span {
+            color: var(--secondary-color); 
+            font-weight: 700;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            width: 100%;
+        }
+
+        .button-grid a {
+            text-decoration: none; 
+        }
+
+        .button-grid button {
+            width: 100%;
+            padding: 20px 15px;
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            color: var(--button-text-color);
+            font-size: 1.1em;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px; 
+        }
+
+        .button-grid button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(37, 117, 252, 0.4);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); 
+        }
+        
+        .button-grid button:active {
+            transform: translateY(-2px);
+        }
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 30px;
+                max-width: 95%;
+            }
+            h1 {
+                font-size: 2em;
+                margin-bottom: 30px;
+            }
+            .button-grid {
+                grid-template-columns: 1fr; 
+            }
+            .button-grid button {
+                padding: 18px 10px;
+                font-size: 1em;
+            }
+        }
+        @media (max-width: 480px) {
+            .dashboard-container {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 1.7em;
+                margin-bottom: 25px;
+            }
+        }
+    </style>
 </head>
 <body>
-<h1>Welcome, <span th:text="${loggedInEmployee.name}">Employee Name</span></h1>
 
-<div>
-    <a href="/employee/profile"><button>Profile</button></a>
-    <a href="/employee/update"><button>Update</button></a>
-    <a href="/employee/attendance"><button>Attendance</button></a>
-    <a href="/employee/payment"><button>Payment Details</button></a>
-    <a href="/employee/leave"><button>Apply Leave</button></a>
-    <a href="/employee/logout"><button>Logout</button></a>
+<div class="background">
+    <div class="blob blob1"></div>
+    <div class="blob blob2"></div>
 </div>
+
+<div class="dashboard-container">
+    <h1>Welcome, <span th:text="${loggedInEmployee.name}">Employee Name</span></h1>
+
+    <div class="button-grid">
+        <a href="/employee/profile">
+            <button><i class="fas fa-user-circle"></i> Profile</button>
+        </a>
+        <a href="/employee/update">
+            <button><i class="fas fa-edit"></i> Update</button>
+        </a>
+        <a href="/employee/attendance">
+            <button><i class="fas fa-clipboard-check"></i> Attendance</button>
+        </a>
+        <a href="/employee/payment">
+            <button><i class="fas fa-credit-card"></i> Payment Details</button>
+        </a>
+        <a href="/employee/leave">
+            <button><i class="fas fa-calendar-alt"></i> Apply Leave</button>
+        </a>
+        <a href="/employee/logout">
+            <button><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </a>
+    </div>
+</div>
+
 </body>
 </html>
