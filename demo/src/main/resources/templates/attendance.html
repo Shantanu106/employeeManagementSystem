@@ -43,12 +43,12 @@
             padding-bottom: 1rem;
             border-bottom: 1px solid rgba(0, 0, 0, 0.1);
             margin-bottom: 1rem;
-            color: #333; 
+            color: #333;
         }
 
         #sidebar ul { list-style: none; }
         #sidebar ul li a {
-            color: #333; 
+            color: #333;
             text-decoration: none;
             display: flex;
             align-items: center;
@@ -67,7 +67,7 @@
             width: 20px;
             text-align: center;
         }
-        
+
         .page-container {
             padding: 2.5rem;
             transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -79,7 +79,7 @@
         .page-container.shifted {
             margin-left: 240px;
         }
-        
+
         #menuToggle {
             display: grid;
             place-items: center;
@@ -106,7 +106,7 @@
             width: 100%;
             max-width: 1000px;
             padding: 40px;
-            background: rgba(255, 255, 255, 0.3); 
+            background: rgba(255, 255, 255, 0.3);
             border-radius: 20px;
             border: 1px solid rgba(255, 255, 255, 0.5);
             backdrop-filter: blur(15px);
@@ -120,7 +120,7 @@
             font-weight: 600;
             margin-bottom: 30px;
             font-size: 2.5rem;
-            text-shadow: none; 
+            text-shadow: none;
         }
 
         .attendance-table {
@@ -155,11 +155,11 @@
             box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.1);
         }
         .btn-present {
-            background: linear-gradient(45deg, #43e97b, #38f9d7); 
+            background: linear-gradient(45deg, #43e97b, #38f9d7);
             color: #1a5943;
         }
         .btn-absent {
-            background: linear-gradient(45deg, #ff9a9e, #fecfef); 
+            background: linear-gradient(45deg, #ff9a9e, #fecfef);
             color: #794244;
         }
         .action-button:hover:not(:disabled) {
@@ -205,40 +205,40 @@
             <h1>Employee Attendance</h1>
             <table class="attendance-table">
                 <thead>
-                    <tr>
-                        <th>Employee ID</th>
-                        <th>Name</th>
-                        <th>Mark Present</th>
-                        <th>Mark Absent</th>
-                    </tr>
+                <tr>
+                    <th>Employee ID</th>
+                    <th>Name</th>
+                    <th>Mark Present</th>
+                    <th>Mark Absent</th>
+                </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="emp : ${employees}">
-                        <td th:text="${emp.id}">1</td>
-                        <td th:text="${emp.name}">John Doe</td>
-                        <td>
-                            <form th:action="@{/admin/attendance/mark}" method="post" style="display:inline">
-                                <input type="hidden" name="employeeId" th:value="${emp.id}">
-                                <input type="hidden" name="present" value="true">
-                                <button type="submit"
-                                        class="action-button btn-present"
-                                        th:disabled="${todayAttendance[emp.id] != null && todayAttendance[emp.id].present}">
-                                    Present
-                                </button>
-                            </form>
-                        </td>
-                        <td>
-                            <form th:action="@{/admin/attendance/mark}" method="post" style="display:inline">
-                                <input type="hidden" name="employeeId" th:value="${emp.id}">
-                                <input type="hidden" name="present" value="false">
-                                <button type="submit"
-                                        class="action-button btn-absent"
-                                        th:disabled="${todayAttendance[emp.id] != null && !todayAttendance[emp.id].present}">
-                                    Absent
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
+                <tr th:each="emp : ${employees}">
+                    <td th:text="${emp.id}">1</td>
+                    <td th:text="${emp.name}">John Doe</td>
+                    <td>
+                        <form th:action="@{/admin/attendance/mark}" method="post" style="display:inline">
+                            <input type="hidden" name="employeeId" th:value="${emp.id}">
+                            <input type="hidden" name="present" value="true">
+                            <button type="submit"
+                                    class="action-button btn-present"
+                                    th:disabled="${todayAttendance[emp.id] != null && todayAttendance[emp.id].present}">
+                                Present
+                            </button>
+                        </form>
+                    </td>
+                    <td>
+                        <form th:action="@{/admin/attendance/mark}" method="post" style="display:inline">
+                            <input type="hidden" name="employeeId" th:value="${emp.id}">
+                            <input type="hidden" name="present" value="false">
+                            <button type="submit"
+                                    class="action-button btn-absent"
+                                    th:disabled="${todayAttendance[emp.id] != null && !todayAttendance[emp.id].present}">
+                                Absent
+                            </button>
+                        </form>
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </div>
